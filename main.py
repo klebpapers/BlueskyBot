@@ -1,29 +1,21 @@
-import feedparser
+import os
+import time
 import json
-import hashlib
-from datetime import datetime, timedelta
+import feedparser
 from scheduler import schedule_posts
-from pathlib import Path
 
-FEEDS_FILE = "feeds.txt"
-DB_FILE = "posted_db.json"
+DB_FILE = "posted_ids.json"
+FEED_FILE = "feeds.txt"
 
-def load_feeds():
-    with open(FEEDS_FILE) as f:
-        return [line.strip() for line in f if line.strip()]
-
-def load_db():
-    if not Path(DB_FILE).exists():
+def load_posted_db():
+    if not os.path.exists(DB_FILE):
         return set()
     with open(DB_FILE, "r") as f:
         return set(json.load(f))
 
-def save_db(posted_ids):
+def save_posted_db(posted_ids):
     with open(DB_FILE, "w") as f:
         json.dump(list(posted_ids), f)
-
-def generate_id(entry):
-    return hashlib.md5(entry.title.encode("utf-8")).hexdigest()
 
 def fetch_new_papers():
     posted_ids = load_posted_db()
@@ -50,10 +42,15 @@ def fetch_new_papers():
                 })
                 posted_ids.add(uid)
 
-    save_posted_db(posted_ids)  # ✅ This should be at the same level as `return`
+    save_posted_db(posted_ids)
     return new_papers
 
 if __name__ == "__main__":
+    print("Fetching new papers...")
     papers = fetch_new_papers()
-    if papers:
+
+    if not papers:
+        print("No new papers to post.")
+    else:
+        print(f"Found {len(papers)} new papers. Scheduling posts...")
         schedule_posts(papers)
