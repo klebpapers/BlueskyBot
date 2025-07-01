@@ -28,7 +28,8 @@ def truncate(text, max_length):
     return text if len(text) <= max_length else text[:max_length - 1] + "…"
 
 async def post_to_bluesky(paper):
-    short_link = await shorten_url(paper["link"])
+    doi_url = f"https://doi.org/{paper['doi']}" if paper.get("doi") else paper["link"]
+    short_link = await shorten_url(doi_url)
     base_content = f"{paper['title']}\n{short_link}"
     content = truncate(base_content, 300)
 
