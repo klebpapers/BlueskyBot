@@ -8,4 +8,4 @@ async def schedule_async(papers):
     interval = (23 * 3600) / len(papers)
     for i, paper in enumerate(papers):
         await asyncio.sleep(interval * i)
-         await post_to_bluesky(paper)
+        await post_to_bluesky(paper)
