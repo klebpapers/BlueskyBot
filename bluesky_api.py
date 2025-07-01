@@ -12,16 +12,6 @@ if not BLUESKY_HANDLE or not BLUESKY_APP_PASSWORD:
 client = Client()
 client.login(BLUESKY_HANDLE, BLUESKY_APP_PASSWORD)
 
-async def shorten_url(url):
-    if not TLY_API_KEY:
-        return url  # Fallback to original if no key
-    async with aiohttp.ClientSession() as session:
-        async with session.post("https://t.ly/api/v1/link/shorten", json={
-            "long_url": url,
-            "domain": "https://t.ly",
-        }, headers={"Content-Type": "application/json", "Authorization": f"Bearer {TLY_API_KEY}"}) as resp:
-            data = await resp.json()
-            return data.get("short_url", url)
 
 def truncate(text, max_length):
     return text if len(text) <= max_length else text[:max_length - 1] + "…"
