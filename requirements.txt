@@ -1,2 +1,3 @@
 feedparser
 atproto
+python-dotenv
