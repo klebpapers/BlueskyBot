@@ -26,31 +26,31 @@ def generate_id(entry):
     return hashlib.md5(entry.title.encode("utf-8")).hexdigest()
 
 def fetch_new_papers():
-    feeds = load_feeds()
-    posted_ids = load_db()
+    posted_ids = load_posted_db()
     new_papers = []
 
+    with open(FEED_FILE, "r") as f:
+        feeds = [line.strip() for line in f if line.strip()]
+
     for url in feeds:
-        d = feedparser.parse(url)
-        for entry in d.entries:
-            paper_id = generate_id(entry)
-            if paper_id not in posted_ids:
-               doi = entry.get("dc_identifier") or entry.get("doi") or None
+        feed = feedparser.parse(url)
+        for entry in feed.entries:
+            uid = entry.get("id") or entry.get("link") or entry.get("title")
+            if uid not in posted_ids:
+                doi = entry.get("dc_identifier") or entry.get("doi")
+                if not doi and "doi.org" in entry.get("link", ""):
+                    doi = entry["link"].split("doi.org/")[-1]
 
-# fallback: try to extract DOI from links (e.g., for biorxiv)
-if not doi and "doi.org" in entry.get("link", ""):
-    doi = entry["link"].split("doi.org/")[-1]
+                new_papers.append({
+                    "id": uid,
+                    "title": entry.get("title"),
+                    "doi": doi,
+                    "link": entry.get("link"),
+                    "summary": entry.get("summary", "")[:200]
+                })
+                posted_ids.add(uid)
 
-new_papers.append({
-    "id": uid,
-    "title": entry.get("title"),
-    "doi": doi,
-    "link": entry.get("link"),
-    "summary": entry.get("summary", "")[:200]
-})
-
-
-    save_db(posted_ids)
+    save_posted_db(posted_ids)  # ✅ This should be at the same level as `return`
     return new_papers
 
 if __name__ == "__main__":
