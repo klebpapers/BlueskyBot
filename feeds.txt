@@ -1,3 +1,8 @@
-http://export.arxiv.org/rss/cs.AI
-https://www.nature.com/subjects/artificial-intelligence.rss
-https://www.sciencedaily.com/rss/mind_brain/artificial_intelligence.xml
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1ZSp7ZOQTWbjf8X-je_yPRuN351d9DKLaivLsW0GCart_FyEUx/?limit=100&utm_campaign=pubmed-2&fc=20250701105315
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1Raub9iNEXWWQUYk4ADdBP9DdPVmTg_qHV6KzylWMKmqwFnUK3/?limit=100&utm_campaign=pubmed-2&fc=20250701105606
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1nKk7DZ0UbzWx9s5EwPSqdcOq5-lejS5DbsV1a9rK2182IXE7n/?limit=100&utm_campaign=pubmed-2&fc=20250701105714
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1j_AM05Yvo4fA0z6yYA1Dv3MbDy0QbEoG9pfHurrwJOfnLdM4S/?limit=100&utm_campaign=pubmed-2&fc=20250701105952
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1vSAQI4vYNJz7tg3D5kRufBRrg24xOQH7HbJNGFAhuO3QiOsEL/?limit=100&utm_campaign=pubmed-2&fc=20250701110043
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1XaEVbf0Ww0eRlY1TvuDj1J1UHPvzxaefWzV2rgrdKk-wK3oTO/?limit=100&utm_campaign=pubmed-2&fc=20250701110109
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1foLUIMrX-rFqS0jGEOnMwNYsQdkJI97a51QyvxeWODUfNq9vO/?limit=100&utm_campaign=pubmed-2&fc=20250701110147
+https://pubmed.ncbi.nlm.nih.gov/rss/search/1N__R79HI8t4j-8VqpMUfoGu45D0Mr3a4JmucStS7Q9AzS7QDz/?limit=100&utm_campaign=pubmed-2&fc=20250701110212
