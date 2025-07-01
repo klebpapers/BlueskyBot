@@ -5,7 +5,6 @@ import asyncio
 
 BLUESKY_HANDLE = os.getenv("BSKY_HANDLE")
 BLUESKY_APP_PASSWORD = os.getenv("BSKY_APP_PASSWORD")
-TLY_API_KEY = os.getenv("TLY_API_KEY")  # You must set this in GitHub secrets or locally
 
 if not BLUESKY_HANDLE or not BLUESKY_APP_PASSWORD:
     raise ValueError("Missing BSKY_HANDLE or BSKY_APP_PASSWORD environment variables")
