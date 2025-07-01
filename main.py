@@ -35,12 +35,20 @@ def fetch_new_papers():
         for entry in d.entries:
             paper_id = generate_id(entry)
             if paper_id not in posted_ids:
-                new_papers.append({
-                    "id": paper_id,
-                    "title": entry.title,
-                    "link": entry.link
-                })
-                posted_ids.add(paper_id)
+               doi = entry.get("dc_identifier") or entry.get("doi") or None
+
+# fallback: try to extract DOI from links (e.g., for biorxiv)
+if not doi and "doi.org" in entry.get("link", ""):
+    doi = entry["link"].split("doi.org/")[-1]
+
+new_papers.append({
+    "id": uid,
+    "title": entry.get("title"),
+    "doi": doi,
+    "link": entry.get("link"),
+    "summary": entry.get("summary", "")[:200]
+})
+
 
     save_db(posted_ids)
     return new_papers
