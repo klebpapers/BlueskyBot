@@ -1,8 +1,5 @@
 from atproto import Client
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 BLUESKY_HANDLE = os.getenv("BSKY_HANDLE")
 BSKY_APP_PASSWORD = os.getenv("BSKY_APP_PASSWORD")
