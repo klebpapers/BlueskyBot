@@ -1,7 +1,8 @@
+import feedparser
+import json
 import os
 import time
-import json
-import feedparser
+from datetime import datetime, timedelta
 from scheduler import schedule_posts
 
 DB_FILE = "posted_ids.json"
@@ -24,33 +25,43 @@ def fetch_new_papers():
     with open(FEED_FILE, "r") as f:
         feeds = [line.strip() for line in f if line.strip()]
 
+    now = datetime.utcnow()
+    cutoff = now - timedelta(days=1)  # Only papers from last 24 hours
+
     for url in feeds:
         feed = feedparser.parse(url)
         for entry in feed.entries:
             uid = entry.get("id") or entry.get("link") or entry.get("title")
-            if uid not in posted_ids:
-                doi = entry.get("dc_identifier") or entry.get("doi")
-                if not doi and "doi.org" in entry.get("link", ""):
-                    doi = entry["link"].split("doi.org/")[-1]
+            if uid in posted_ids:
+                continue
 
-                new_papers.append({
-                    "id": uid,
-                    "title": entry.get("title"),
-                    "doi": doi,
-                    "link": entry.get("link"),
-                    "summary": entry.get("summary", "")[:200]
-                })
-                posted_ids.add(uid)
+            published = entry.get("published_parsed") or entry.get("updated_parsed")
+            if not published:
+                continue
+
+            pub_date = datetime.utcfromtimestamp(time.mktime(published))
+            if pub_date < cutoff:
+                continue  # Too old
+
+            doi = entry.get("dc_identifier") or entry.get("doi")
+            if not doi and "doi.org" in entry.get("link", ""):
+                doi = entry["link"].split("doi.org/")[-1]
+
+            new_papers.append({
+                "id": uid,
+                "title": entry.get("title"),
+                "doi": doi,
+                "link": entry.get("link"),
+                "summary": entry.get("summary", "")[:200]
+            })
+
+            posted_ids.add(uid)
 
     save_posted_db(posted_ids)
     return new_papers
 
 if __name__ == "__main__":
-    print("Fetching new papers...")
+    print("🔎 Fetching new papers...")
     papers = fetch_new_papers()
-
-    if not papers:
-        print("No new papers to post.")
-    else:
-        print(f"Found {len(papers)} new papers. Scheduling posts...")
-        schedule_posts(papers)
+    print(f"📄 Found {len(papers)} new papers. Scheduling posts...")
+    schedule_posts(papers)
