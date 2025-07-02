@@ -10,22 +10,23 @@ if not BLUESKY_HANDLE or not BSKY_APP_PASSWORD:
 client = Client()
 client.login(BLUESKY_HANDLE, BSKY_APP_PASSWORD)
 
+MAX_POST_LENGTH = 300
+
 async def post_to_bluesky(paper):
     title = paper["title"]
     doi = paper.get("doi")
 
     if not doi:
-        print("No DOI found, skipping:", title)
+        print("Skipping (no DOI):", title)
         return
 
     doi_url = f"https://doi.org/{doi}"
+
+    # Leave room for link and newline
+    max_title_len = MAX_POST_LENGTH - len(doi_url) - 1
+    if len(title) > max_title_len:
+        title = title[:max_title_len - 3] + "..."
+
     post = f"{title}\n{doi_url}"
-
-    # Ensure the post is within Bluesky's 300-character limit
-    if len(post) > 300:
-        title = title[:295 - len(doi_url)] + "..."
-        post = f"{title}\n{doi_url}"
-
     client.send_post(text=post)
-    print("✅ Posted:", title)
-
+    print("✅ Posted:", post)
