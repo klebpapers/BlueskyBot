@@ -1,9 +1,10 @@
 name: Daily RSS Bot
 
+
 on:
   schedule:
-    - cron: '0 6 * * *'  # Every day at 6am UTC
-  workflow_dispatch:
+    - cron: "0 12 * * *"  # Runs once daily at 12:00 UTC
+  workflow_dispatch:      # Allow manual triggering
 
 jobs:
   run-bot:
@@ -11,13 +12,15 @@ jobs:
     env:
       BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
       BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.11
 
       - name: Install dependencies
         run: pip install -r requirements.txt
