@@ -1,4 +1,4 @@
-from atproto import Client
+from atproto import Client, models
 import os
 
 BLUESKY_HANDLE = os.getenv("BSKY_HANDLE")
@@ -49,5 +49,6 @@ async def post_to_bluesky(paper):
     except ValueError:
         facets = []
 
+    # ✅ Actually send the post
     client.send_post(text=post_text, facets=facets)
     print("✅ Posted:", post_text)
