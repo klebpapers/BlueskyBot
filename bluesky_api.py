@@ -15,11 +15,15 @@ MAX_POST_LENGTH = 300
 async def post_to_bluesky(paper):
     title = paper["title"]
     doi = paper.get("doi")
-    doi = doi.replace("doi:", "")
 
     if not doi:
         print("Skipping (no DOI):", title)
         return
+
+    # Normalize DOI
+    doi = doi.strip()
+    if doi.lower().startswith("doi:"):
+        doi = doi[4:].strip()
 
     doi_url = f"https://doi.org/{doi}"
 
